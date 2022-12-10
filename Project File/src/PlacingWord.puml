@@ -1,0 +1,80 @@
+@startuml
+title Placing and Submitting Words
+skinparam monochrome true
+
+actor user as u
+participant "<u>rp:RackPanel" as rp
+participant "<u>t:Tile" as t
+participant "<u>bc:BoardPaneController" as bc
+participant "<u>bm:BoardModel" as bm
+participant "<u>sm:ScrabbleModel" as sm
+participant "<u>p:Player" as p
+participant "<u>s:Square" as s
+participant "<u>t:Tile" as t
+participant "<u>sc:SubmitController" as sc
+participant "<u>sv:ScrabbleView" as sv
+participant "<u>w:Word" as w
+
+activate u
+activate rp
+
+'Selecting a tile from rack
+u -> rp: actionPerformed();
+activate t
+rp -> t: toggleSelect();
+activate bc
+
+
+'Placing selected tile on rack
+u -> bc: actionPerformed();
+activate bm
+bc -> bm: placeTile();
+activate sm
+bm -> sm: getActivePlayer():
+sm --> bm
+activate p
+bm -> p: getSelectedTiles();
+p --> bm
+activate s
+bm -> s: placeTile();
+bm -> t: setPlaced();
+bm -> t: toggleSelect();
+bm -> p: updatePlayerViews();
+
+p -> p: getNonPlacedTiles();
+p -> rp: handlePlayerRackUpdate();
+rp -> rp: removeAll();
+rp -> rp: updateRackButtons();
+
+bm -> bm: updateBoardViews();
+
+
+'Checking placement and score
+activate sc
+u -> sc: actionPerformed();
+sc -> sm: place();
+sm -> bm: placeWord();
+
+bm -> bm: extractDirection();
+bm -> w: getWord();
+activate w
+w --> bm
+bm -> s: hasTile();
+s --> bm
+bm -> w: isValidWord();
+w -> bm
+bm -> bm: getWordExtend();
+bm -> s: getScoreValue();
+s -> t: getScore();
+t --> s
+s --> bm
+
+bm --> sm
+sm -> p: removePlacedTiles();
+sm -> p: addTilesToRack();
+sm -> p: setScore();
+sm -> sm: switchPlayers();
+activate sv
+sm -> sv: handleScrabbleUpdate();
+
+@enduml

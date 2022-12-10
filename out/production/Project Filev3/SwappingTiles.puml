@@ -1,0 +1,65 @@
+@startuml
+title Swapping Tiles
+skinparam monochrome true
+
+actor user as u
+participant "<u>sc:SwapController" as sc
+participant "<u>sm:ScrabbleModel" as sm
+participant "<u>sv:ScrabbleView" as sv
+participant "<u>bm:BoardModel" as bm
+participant "<u>p:Player" as p
+participant "<u>rp:RackPanel" as rp
+participant "<u>t:Tile" as t
+participant "<u>tp:TilePile" as tp
+
+
+
+
+activate u
+activate rp
+
+u -> rp: actionPerformed();
+activate t
+rp -> t: toggleSelect();
+
+activate sc
+u -> sc: actionPerformed();
+activate sm
+sc -> sm: swap();
+activate bm
+sm -> bm: returnPlacedTilesToPlayer();
+bm -> sm: getActivePlayer();
+sm --> bm:
+activate p
+bm -> p: updatePlayerViews();
+
+p -> p: getNonPlacedTiles();
+p -> rp: handlePlayerRackUpdate();
+rp -> rp: removeAll();
+rp -> rp: updateRackButtons();
+
+bm -> bm: updateBoardViews();
+deactivate rp
+sm -> p: getSelectedTiles();
+p --> sm
+sm -> p: getTile();
+p --> sm
+
+sm -> t: toggleSelect();
+activate tp
+sm -> tp: addTile();
+sm -> p: addTileToRack();
+sm -> p: resetPCount();
+sm -> sm: switchPlayers();
+deactivate tp
+deactivate t
+activate sv
+sm -> sv: handleScrabbleUpdate();
+
+'deactivate sv
+'deactivate sc
+'deactivate u
+'deactivate sm
+'deactivate bm
+
+@enduml

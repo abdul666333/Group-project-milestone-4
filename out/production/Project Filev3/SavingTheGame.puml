@@ -1,0 +1,13 @@
+@startuml
+title Save Game c:
+skinparam monochrome true
+
+participant "<u>sm:ScrabbleModel" as sm
+
+activate sm
+
+sm->sm: method()
+sm-->sm
+
+deactivate sm
+@enduml

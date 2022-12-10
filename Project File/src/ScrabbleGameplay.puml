@@ -1,0 +1,66 @@
+@startuml
+title Scrabble Gameplay c: (Umniyah)
+skinparam monochrome true
+
+participant "<u>p:Player" as p
+participant "<u>s:Scrabble" as s
+participant "<u>t:Tile" as t
+participant "<u>tp:TilePile" as tp
+participant "<u>sq:Square" as sq
+
+activate p
+activate s
+activate t
+activate tp
+activate sq
+
+s -> s: play()
+
+s -> p: getName()
+p --> s
+
+s -> p: getScore()
+p --> s
+
+p -> tp: getTile(7)
+tp --> p
+p --> s
+
+s -> p: addTileToRack()
+
+s -> p: getTileRack()
+p --> s
+
+s -> s: swap()
+
+s -> p:getTile()
+p --> s
+
+p -> t: getChar()
+t --> p
+t --> sq
+
+s -> tp: addTile(this)
+
+deactivate tp
+
+s -> s: passTurn()
+
+s -> p: getPassCount()
+p --> s
+
+s -> p: incrPCount()
+s -> p: resetPCount()
+s -> s: switchPlayers()
+
+t -> t: getScore()
+t --> sq
+
+deactivate sq
+deactivate t
+
+s -> p: setScore(score)
+
+deactivate p
+deactivate s
+@enduml

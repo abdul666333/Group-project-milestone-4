@@ -1,0 +1,56 @@
+@startuml
+title BotPlayer
+skinparam monochrome true
+
+participant "<u>sm:ScrabbleModel" as sm
+participant "<u>sv:ScrabbleViews" as sv
+participant "<u>bp:BotPlayer" as bp
+participant "<u>bm:BoardModel" as bm
+
+
+
+activate bp
+activate sm
+
+sm->bp: botPlay()
+activate bm
+
+bp->bm:countEmptySquaresLeft()
+bm-->bp
+
+bp->bm:countEmptySquaresRight()
+bm-->bp
+
+bp->bm:countEmptySquaresUp()
+bm-->bp
+
+bp->bm:countEmptySquaresDown()
+bm-->bp
+
+bp->bp:getPossibleWords()
+
+bp->bp:uniqueLetterPlacement()
+
+bp->bm:placeOnBoard()
+
+bp->bm:placeWords()
+
+bp->bp:setScore()
+
+bp-->sm
+
+sm->bp:removePlaceTiles()
+
+sm->bp:addTileRack()
+deactivate bp
+
+sm->sm:switchPlayers()
+
+activate sv
+
+sm->sv:handleScrabbleUpdates()
+
+sm->bm:updateBoardViews()
+
+
+@enduml
